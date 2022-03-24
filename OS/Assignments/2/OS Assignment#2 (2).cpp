@@ -1,95 +1,106 @@
-#include<iostream>
-#include<string>
-#include <sstream>
-
+#include <iostream>
 using namespace std;
-int splitString(string str)
+
+struct BstNode
 {
-    int number;
-    string alpha, num, special;
-    for (int i=0; i<str.length(); i++)
+    int data;
+    BstNode *left;
+    BstNode *right;
+};
+
+BstNode *createNode(int data)
+{
+    BstNode *newNode = new BstNode();
+
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+BstNode *insertNode(BstNode *root, int data)
+{
+    if (root == NULL)
+        root = createNode(data);
+    else if (data <= root->data)
+        root->left = insertNode(root->left, data);
+    else
+        root->right = insertNode(root->right, data);
+    return root;
+}
+
+bool searchNode(BstNode *root, int data)
+{
+    if (root == NULL)
+        return false;
+    else if (data == root->data)
+        return true;
+    else if (data <= root->data)
+        return searchNode(root->left, data);
+    else
+        return searchNode(root->right, data);
+}
+
+
+
+BstNode *deleteNode(BstNode *root, int data)
+{
+    if (root == NULL)
+        return root;
+    else if (data < root->data)
+        root->left = deleteNode(root->left, data);
+    else if (data > root->data)
+        root->right = deleteNode(root->right, data);
+    else
     {
-       if (isdigit(str[i]))
-            num.push_back(str[i]);
-        else if((str[i] >= 'A' && str[i] <= 'Z') ||
-                (str[i] >= 'a' && str[i] <= 'z'))
-            alpha.push_back(str[i]);
-        else
-            special.push_back(str[i]);
-      
-		 { 
-		     if (special.length())
-		    
-			 return 0;
-		 
-		     else
-		     {
-		    return number;
-		}
-			
-		}
+        if (root->left == NULL && root->right == NULL)
+        {
+            delete root;
+            root = NULL;
+        }
+        else if (root->left == NULL)
+        {
+            BstNode *temp = root;
+            root = root->right;
+            delete temp;
+        }
+        else if (root->right == NULL)
+        {
+            BstNode *temp = root;
+            root = root->left;
+            delete temp;
+        }
         
-} 
-
-
- 
-  stringstream ss;
-  ss << num;
-  ss >> number;
-    return number;
-    
-
+    }
+    return root;
 }
 
+int main()
+{
+    BstNode *root = NULL;
 
-int main() {
+   
+    root = insertNode(root, 12);
+    root = insertNode(root, 15);
+    root = insertNode(root, 5);
+    root = insertNode(root, 53);
+    root = insertNode(root, 98);
+    root = insertNode(root, 0);
 
- 
-    string A, B, C;
+   
+    std::cout << searchNode(root, 53) << std::endl;
+    std::cout << searchNode(root, 42) << std::endl;
+    std::cout << searchNode(root, 15) << std::endl;
 
-     
-    cout<<"Enter number A";
-    cin>>A;
-    cout<<"Enter number B";
-    cin>>B;
-    cout<<"Enter number C";
-    cin>>C;
     
-    
-   int a = splitString(A);
-   int b=   splitString(B);
-   int c=  splitString(C);
-     
-     cout<<"value of A is"<<a<<endl;
-    cout<<"value of B is"<<b<<endl;
-    cout<<"value of C is"<<c<<endl;
-    
-    if( a == 0)
-    {
-    	a = c-b;
-}
+    root = deleteNode(root, 53);
+    root = deleteNode(root, 15);
 
-    else if (b == 0)
-    {
-    	b = c - a;
-	}
-	
-	
-    else if (c == 0)
-    {
-    	c = b+a;
-	}
-	cout<<"Value of a is" <<a<<endl;
-    cout<<"Value of b is" <<b<<endl;
-    cout<<"Value of c is" <<c<<endl;
+   
+    std::cout << searchNode(root, 53) << std::endl;
+    std::cout << searchNode(root, 15) << std::endl;
     return 0;
 }
 
-  
 
-
-
-
-
-
-
+    
